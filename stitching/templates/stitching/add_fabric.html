@@ -1,0 +1,44 @@
+{% extends 'stitching/base.html' %}
+
+{% block title %}Add Fabric & Accessories{% endblock %}
+
+{% block content %}
+<h2>🧵 Add Fabric & Accessories</h2>
+
+<!-- Display form errors -->
+{% if form.errors %}
+    <div class="alert alert-danger">
+        <strong>⚠️ Please correct the following errors:</strong>
+        <ul>
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <li>{{ field|title }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+<!-- Fabric Form -->
+<form method="POST">
+    {% csrf_token %}
+    <div>
+        <label for="id_name">Fabric/Accessory Name:</label>
+        {{ form.name }}
+    </div>
+    <div>
+        <label for="id_quantity">Quantity:</label>
+        {{ form.quantity }}
+    </div>
+    <div>
+        <label for="id_unit_price">Unit Price (₹):</label>
+        {{ form.unit_price }}
+    </div>
+
+    <button type="submit">Save Fabric</button>
+</form>
+
+<!-- Link to Dashboard -->
+<a href="{% url 'dashboard' %}">🔙 Back to Dashboard</a>
+
+{% endblock %}

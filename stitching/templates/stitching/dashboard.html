@@ -1,0 +1,144 @@
+{% extends 'stitching/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    
+    <!-- User Info Section -->
+    <div class="row">
+        <div class="col-md-12 text-end">
+            <p class="fw-bold text-primary">👋 Welcome, {{ user.username }} ({{ user.get_role_display }})</p>
+        </div>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="row text-white">
+        <div class="col-md-4">
+            <div class="card bg-primary shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">📦 Total Orders</h5>
+                    <p class="fs-3">{{ total_orders }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card bg-success shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">🧵 Total Fabrics</h5>
+                    <p class="fs-3">{{ total_fabrics }}</p>
+                </div>
+            </div>
+        </div>
+
+        {% if user.role == 'admin' %}
+        <div class="col-md-4">
+            <div class="card bg-warning shadow-sm text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">👥 Total Users</h5>
+                    <p class="fs-3">{{ total_users }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <hr>
+
+    <!-- Student Measurements Section -->
+    <h3 class="text-primary mt-4">📏 Student Measurement Management</h3>
+    <p><b>Total Measurements:</b> {{ total_measurements }}</p>
+    <ul class="list-group">
+        {% for student in recent_measurements %}
+            <li class="list-group-item">{{ student.student_name }} - {{ student.school_name }}</li>
+        {% endfor %}
+    </ul>
+
+    {% if user.role in 'admin' or user.role == 'staff' %}
+        <a href="{% url 'add_measurement' %}" class="btn btn-success mt-2">➕ Add Measurement</a>
+    {% endif %}
+    <a href="{% url 'measurement_list' %}" class="btn btn-secondary mt-2">📜 View All Measurements</a>
+
+    <hr>
+
+    <!-- Fabric & Accessories -->
+    <h3 class="text-success mt-4">🧵 Fabric & Accessories Management</h3>
+    <p><b>Total Items:</b> {{ total_fabrics }}</p>
+    
+    <div class="row">
+        {% for fabric in fabric_summary %}
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ fabric.name }}</h5>
+                    <p class="card-text"><b>Quantity:</b> {{ fabric.quantity }} units</p>
+                    <p class="card-text"><b>Price:</b> ₹{{ fabric.unit_price }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <p class="mt-2 text-danger"><b>⚠️ Low Stock:</b></p>
+    <ul class="list-group">
+        {% for fabric in low_stock_fabrics %}
+            <li class="list-group-item list-group-item-warning">{{ fabric.name }} (Only {{ fabric.quantity }} left!)</li>
+        {% endfor %}
+    </ul>
+
+    {% if user.role in 'admin' or user.role == 'staff' %}
+        <a href="{% url 'add_fabric' %}" class="btn btn-warning mt-2">➕ Add Fabric</a>
+    {% endif %}
+    <a href="{% url 'fabric_list' %}" class="btn btn-secondary mt-2">📜 View All Fabrics</a>
+
+    <hr>
+
+    <!-- Orders Overview -->
+    <h3 class="text-info mt-4">📦 Order Management</h3>
+    <p><b>Total Orders:</b> {{ total_orders }}</p>
+    <p>📌 <b>Pending Orders:</b> {{ pending_orders }}</p>
+    <p>✅ <b>Completed Orders:</b> {{ completed_orders }}</p>
+
+    <table class="table table-hover mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Order ID</th>
+                <th>Student</th>
+                <th>Fabric</th>
+                <th>Quantity</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in recent_orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.measurement.student_name }}</td>
+                <td>{{ order.fabric.name }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>
+                    <span class="badge {% if order.status == 'pending' %} bg-warning {% else %} bg-success {% endif %}">
+                        {{ order.status }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{% url 'update_order' order.id %}" class="btn btn-sm btn-info">📝 Update</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if user.role == 'admin' or user.role == 'customer' %}
+        <a href="{% url 'create_order' %}" class="btn btn-info mt-2">➕ Place Order</a>
+    {% endif %}
+    <a href="{% url 'order_list' %}" class="btn btn-secondary mt-2">📜 View All Orders</a>
+
+    <hr>
+
+    <!-- Logout -->
+    <a href="{% url 'logout' %}" class="btn btn-danger mt-2">🚪 Logout</a>
+</div>
+{% endblock %}

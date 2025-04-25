@@ -1,0 +1,31 @@
+{% extends 'stitching/base.html' %}
+
+{% block title %}Order List{% endblock %}
+
+{% block content %}
+<h2>📦 Orders Overview</h2>
+<table border="1">
+    <tr>
+        <th>Order ID</th>
+        <th>Student Name</th>
+        <th>Fabric</th>
+        <th>Quantity</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.measurement.student_name }}</td>  <!-- ✅ Fixed -->
+        <td>{{ order.fabric.name }}</td>
+        <td>{{ order.quantity }}</td>
+        <td>{{ order.status }}</td>
+        <td>
+            <a href="{% url 'update_order' order.id %}">📝 Update Status</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'create_order' %}">➕ Create New Order</a>
+<a href="{% url 'dashboard' %}">🔙 Back to Dashboard</a>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'stitching/base.html' %}
+
+{% block title %}Add Student Measurement{% endblock %}
+
+{% block content %}
+<h2>📏 Add Student Measurement</h2>
+
+<!-- Display form errors -->
+{% if form.errors %}
+    <div class="alert alert-danger">
+        <strong>⚠️ Please correct the following errors:</strong>
+        <ul>
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <li>{{ field|title }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+<!-- Measurement Form -->
+<form method="POST">
+    {% csrf_token %}
+    <div>
+        <label for="id_student_name">Student Name:</label>
+        {{ form.student_name }}
+    </div>
+    <div>
+        <label for="id_school_name">School Name:</label>
+        {{ form.school_name }}
+    </div>
+    <div>
+        <label for="id_chest">Chest (inches):</label>
+        {{ form.chest }}
+    </div>
+    <div>
+        <label for="id_waist">Waist (inches):</label>
+        {{ form.waist }}
+    </div>
+    <div>
+        <label for="id_height">Height (inches):</label>
+        {{ form.height }}
+    </div>
+    <div>
+        <label for="id_sleeve_length">Sleeve Length (inches):</label>
+        {{ form.sleeve_length }}
+    </div>
+
+    <button type="submit">Save Measurement</button>
+</form>
+
+<!-- Link to Dashboard -->
+<a href="{% url 'dashboard' %}">🔙 Back to Dashboard</a>
+
+{% endblock %}

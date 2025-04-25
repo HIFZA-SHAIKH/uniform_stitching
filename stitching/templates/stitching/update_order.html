@@ -1,0 +1,18 @@
+{% extends 'stitching/base.html' %}
+
+{% block title %}Update Order{% endblock %}
+
+{% block content %}
+<h2>📝 Update Order Status</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label for="status">Order Status:</label>
+    <select name="status">
+        <option value="pending" {% if order.status == "pending" %}selected{% endif %}>Pending</option>
+        <option value="completed" {% if order.status == "completed" %}selected{% endif %}>Completed</option>
+    </select>
+    <button type="submit">Update</button>
+</form>
+<a href="{% url 'order_list' %}">📜 Back to Orders</a>
+<a href="{% url 'dashboard' %}">🔙 Back to Dashboard</a>
+{% endblock %}

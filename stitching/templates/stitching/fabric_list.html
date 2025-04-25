@@ -1,0 +1,27 @@
+{% extends 'stitching/base.html' %}
+
+{% block title %}Fabric & Accessories List{% endblock %}
+
+{% block content %}
+<h2>🧵 Fabric & Accessories List</h2>
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Unit Price (₹)</th>
+    </tr>
+    {% for fabric in fabrics %}
+    <tr>
+        <td>{{ fabric.name }}</td>
+        <td>{{ fabric.quantity }}</td>
+        <td>₹{{ fabric.unit_price }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- Link to Add Fabric -->
+<a href="{% url 'add_fabric' %}">➕ Add New Fabric</a>
+<a href="{% url 'dashboard' %}">🔙 Back to Dashboard</a>
+
+{% endblock %}

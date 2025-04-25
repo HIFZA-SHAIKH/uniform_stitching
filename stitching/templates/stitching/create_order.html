@@ -1,0 +1,37 @@
+{% extends 'stitching/base.html' %}
+
+{% block title %}Create Order{% endblock %}
+
+{% block content %}
+<h2>🛒 Create New Order</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label for="id_measurement">👕 Select Student:</label>
+    <select name="measurement" id="id_measurement">
+        {% for measurement in form.measurement.field.queryset %}
+            <option value="{{ measurement.id }}">{{ measurement.student_name }} ({{ measurement.school_name }})</option>
+        {% endfor %}
+    </select>
+
+    <label for="id_fabric">🧵 Select Fabric:</label>
+    <select name="fabric" id="id_fabric">
+        {% for fabric in form.fabric.field.queryset %}
+            <option value="{{ fabric.id }}">{{ fabric.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="id_quantity">🔢 Quantity:</label>
+    <input type="number" name="quantity" id="id_quantity" required>
+
+    <label for="id_status">📦 Order Status:</label>
+    <select name="status" id="id_status">
+        <option value="pending">Pending</option>
+        <option value="completed">Completed</option>
+    </select>
+
+    <button type="submit">Place Order</button>
+</form>
+
+<a href="{% url 'order_list' %}">📜 View Orders</a>
+<a href="{% url 'dashboard' %}">🔙 Back to Dashboard</a>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'stitching/base.html' %}
+
+{% block title %}Student Measurements{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>📏 Student Measurements</h2>
+    <p><b>Logged in as:</b> {{ user.username }} ({{ user.role|title }})</p>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Student Name</th>
+                <th>School Name</th>
+                <th>Chest (inches)</th>
+                <th>Waist (inches)</th>
+                <th>Height (cm)</th>
+                <th>Sleeve Length (inches)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in measurements %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ student.student_name }}</td>
+                <td>{{ student.school_name }}</td>
+                <td>{{ student.chest }}</td>
+                <td>{{ student.waist }}</td>
+                <td>{{ student.height }}</td>
+                <td>{{ student.sleeve_length }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No measurements available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if user.role == 'admin' or user.role == 'staff' %}
+        <a href="{% url 'add_measurement' %}" class="btn btn-success mt-3">➕ Add New Measurement</a>
+    {% endif %}
+    
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary mt-3">🏠 Back to Dashboard</a>
+</div>
+{% endblock %}
